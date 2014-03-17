@@ -18,15 +18,15 @@ Quick start
 
     url(r'^wowstat/', include('wowstat.urls')),
 
-3. Create or change conf.ini file in root of your django project to add next:
-   [wowza]
-   server_ip = 
-   server_port = 
-   login = 
-   password =
+3. Create or change conf.ini file in root of your django project to add next::
+    [wowza]
+    server_ip = 
+    server_port = 
+    login = 
+    password =
 
-   [postgresql]
-   ip = 
-   user = 
-   pass = 
+    [postgresql]
+    ip = 
+    user = 
+    pass = 
 
