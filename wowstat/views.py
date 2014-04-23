@@ -27,28 +27,49 @@ postgres_user = config.get('postgresql', 'user')
 postgres_pass = config.get('postgresql', 'pass')
 
 wowza_get_string = 'http://85.90.192.233:8001/cams/pathkey=cam'
+velton_video_path = 'http://velton.ua/ru/'
 
 translate = {
-    'veltonMedium46.stream': ('Поле Металлист. Низкое качество', wowza_get_string + '1'),
-    'veltonQuality46.stream': ('Поле Металлист. Высокое качество', wowza_get_string + '1'),
-    'veltonMedium47.stream': ('Детская площадка. Низкое качество', wowza_get_string + '2'),
-    'veltonQuality47.stream': ('Детская площадка. Высокое качество', wowza_get_string + '2'),
-    'veltonMedium48.stream': ('Вид на Металлист. Низкое качество', wowza_get_string + '3'),
-    'veltonQuality48.stream': ('Вид на Металлист. Высокое качество', wowza_get_string + '3'),
-    'veltonMedium49.stream': ('Пл. свободы. Низкое качество', wowza_get_string + '4'),
-    'veltonQuality49.stream': ('Пл. свободы. Высокое качество', wowza_get_string + '4'),
-    'veltonMedium50.stream': ('Донецк. Низкое качество', wowza_get_string + '5'),
-    'veltonQuality50.stream': ('Донецк. Высокое качество', wowza_get_string + '5'),
-    'veltonMedium51.stream': ('Днепропетровск. Низкое качество', wowza_get_string + '1'),
-    'veltonQuality51.stream': ('Днепропетровск. Высокое качество', wowza_get_string + '1'),
-    'veltonMedium52.stream': ('Одесса. Низкое качество', wowza_get_string + '8'),
-    'veltonQuality52.stream': ('Одесса. Высокое качество', wowza_get_string + '8'),
-    'veltonMedium53.stream': ('Полтава. Низкое качество', wowza_get_string + '6'),
-    'veltonQuality53.stream': ('Полтава. Высокое качество', wowza_get_string + '6'),
-    'veltonMedium54.stream': ('Зеркальная струя. Низкое качество', wowza_get_string + '7'),
-    'veltonQuality54.stream': ('Зеркальная струя. Высокое качество', wowza_get_string + '7'),
-    'veltonMedium55.stream': ('Киев. Низкое качество', wowza_get_string + '1'),
-    'veltonQuality55.stream': ('Киев. Высокое качество', wowza_get_string + '1')
+    'veltonMedium46.stream': ('Поле Металлист. Низкое качество',
+        wowza_get_string + '1', velton_video_path + 'metallist/Wide1HQ.shtml'),
+    'veltonQuality46.stream': ('Поле Металлист. Высокое качество',
+        wowza_get_string + '1', velton_video_path + 'metallist/Wide1HQ.shtml'),
+    'veltonMedium47.stream': ('Детская площадка. Низкое качество',
+        wowza_get_string + '2', velton_video_path + 'metallist/Wide2HQ.shtml'),
+    'veltonQuality47.stream': ('Детская площадка. Высокое качество',
+        wowza_get_string + '2', velton_video_path + 'metallist/Wide2HQ.shtml'),
+    'veltonMedium48.stream': ('Вид на Металлист. Низкое качество',
+        wowza_get_string + '3', velton_video_path + 'metallist/Wide1HQ.shtml'),
+    'veltonQuality48.stream': ('Вид на Металлист. Высокое качество',
+        wowza_get_string + '3', velton_video_path + 'metallist/Wide1HQ.shtml'),
+    'veltonMedium49.stream': ('Пл. свободы. Низкое качество',
+        wowza_get_string + '4', velton_video_path + 'webcams/Wide1HQ.shtml'),
+    'veltonQuality49.stream': ('Пл. свободы. Высокое качество',
+        wowza_get_string + '4', velton_video_path + 'webcams/Wide1HQ.shtml'),
+    'veltonMedium50.stream': ('Донецк. Низкое качество',
+        wowza_get_string + '5', velton_video_path + 'webcams/Wide2HQ.shtml'),
+    'veltonQuality50.stream': ('Донецк. Высокое качество',
+        wowza_get_string + '5', velton_video_path + 'webcams/Wide2HQ.shtml'),
+    'veltonMedium51.stream': ('Днепропетровск. Низкое качество',
+        wowza_get_string + '1', velton_video_path + 'webcams/Wide1HQ.shtml'),
+    'veltonQuality51.stream': ('Днепропетровск. Высокое качество',
+        wowza_get_string + '1', velton_video_path + 'webcams/Wide1HQ.shtml'),
+    'veltonMedium52.stream': ('Одесса. Низкое качество',
+        wowza_get_string + '8', velton_video_path + 'webcams/Wide5HQ.shtml'),
+    'veltonQuality52.stream': ('Одесса. Высокое качество',
+        wowza_get_string + '8', velton_video_path + 'webcams/Wide5HQ.shtml'),
+    'veltonMedium53.stream': ('Полтава. Низкое качество',
+        wowza_get_string + '6', velton_video_path + 'webcams/Wide3HQ.shtml'),
+    'veltonQuality53.stream': ('Полтава. Высокое качество',
+        wowza_get_string + '6', velton_video_path + 'webcams/Wide3HQ.shtml'),
+    'veltonMedium54.stream': ('Зеркальная струя. Низкое качество',
+        wowza_get_string + '7', velton_video_path + 'webcams/Wide4HQ.shtml'),
+    'veltonQuality54.stream': ('Зеркальная струя. Высокое качество',
+        wowza_get_string + '7', velton_video_path + 'webcams/Wide4HQ.shtml'),
+    'veltonMedium55.stream': ('Киев. Низкое качество',
+        wowza_get_string + '1', velton_video_path + 'webcams/Wide1HQ.shtml'),
+    'veltonQuality55.stream': ('Киев. Высокое качество',
+        wowza_get_string + '1', velton_video_path + 'webcams/Wide1HQ.shtml')
 }
 
 
@@ -68,7 +89,7 @@ def wowza(request, date_choice):
         return TemplateResponse(request, 'wowstat/error.html', {'err': str(e)})
 
     detail = []
-    camsgrab_list = []
+    cams_dict = {}
     # Find streams info in returned xml.
     for child in (root.find('VHost').find('Application').
                  find('ApplicationInstance').findall('Stream')):
@@ -78,7 +99,7 @@ def wowza(request, date_choice):
 
     for i in detail:  # change stream name (name.stream) to human readable
         if i[0] in translate:
-            camsgrab_list.append(translate[i[0]][1])
+            cams_dict[translate[i[0]][1]] = translate[i[0]][2]
             i[0] = translate[i[0]][0]
 
 
@@ -121,7 +142,7 @@ def wowza(request, date_choice):
     conn.close()
 
     return {'summary': summary, 'detail': detail, 'current': root[0].text,
-            'camsgrab_list': list(set(camsgrab_list))}
+            'cams_dict': cams_dict}
 
 
 def dispatcher(request):

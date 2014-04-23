@@ -15,8 +15,8 @@
         <input type="submit" value="View" name="submit">
     </form>
 
-    {% for i in camsgrab_list %}
-        <img src="{{ i }}" height="100" width="100">
+    {% for k, v in cams_dict.items %}
+        <a href={{ v }} target="_blank"><img src="{{ k }}" height="100" width="100"></a>
     {% endfor %}
 </div>
 
