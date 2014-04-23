@@ -26,27 +26,29 @@ postgres_ip = config.get('postgresql', 'ip')
 postgres_user = config.get('postgresql', 'user')
 postgres_pass = config.get('postgresql', 'pass')
 
+wowza_get_string = 'http://85.90.192.233:8001/cams/pathkey=cam'
+
 translate = {
-    'veltonMedium46.stream': 'Поле Металлист. Низкое качество',
-    'veltonQuality46.stream': 'Поле Металлист. Высокое качество',
-    'veltonMedium47.stream': 'Детская площадка. Низкое качество',
-    'veltonQuality47.stream': 'Детская площадка. Высокое качество',
-    'veltonMedium48.stream': 'Вид на Металлист. Низкое качество',
-    'veltonQuality48.stream': 'Вид на Металлист. Высокое качество',
-    'veltonMedium49.stream': 'Пл. свободы. Низкое качество',
-    'veltonQuality49.stream': 'Пл. свободы. Высокое качество',
-    'veltonMedium50.stream': 'Донецк. Низкое качество',
-    'veltonQuality50.stream': 'Донецк. Высокое качество',
-    'veltonMedium51.stream': 'Днепропетровск. Низкое качество',
-    'veltonQuality51.stream': 'Днепропетровск. Высокое качество',
-    'veltonMedium52.stream': 'Одесса. Низкое качество',
-    'veltonQuality52.stream': 'Одесса. Высокое качество',
-    'veltonMedium53.stream': 'Полтава. Низкое качество',
-    'veltonQuality53.stream': 'Полтава. Высокое качество',
-    'veltonMedium54.stream': 'Зеркальная струя. Низкое качество',
-    'veltonQuality54.stream': 'Зеркальная струя. Высокое качество',
-    'veltonMedium55.stream': 'Киев. Низкое качество',
-    'veltonQuality55.stream': 'Киев. Высокое качество',
+    'veltonMedium46.stream': ('Поле Металлист. Низкое качество', wowza_get_string + '1'),
+    'veltonQuality46.stream': ('Поле Металлист. Высокое качество', wowza_get_string + '1'),
+    'veltonMedium47.stream': ('Детская площадка. Низкое качество', wowza_get_string + '2'),
+    'veltonQuality47.stream': ('Детская площадка. Высокое качество', wowza_get_string + '2'),
+    'veltonMedium48.stream': ('Вид на Металлист. Низкое качество', wowza_get_string + '3'),
+    'veltonQuality48.stream': ('Вид на Металлист. Высокое качество', wowza_get_string + '3'),
+    'veltonMedium49.stream': ('Пл. свободы. Низкое качество', wowza_get_string + '4'),
+    'veltonQuality49.stream': ('Пл. свободы. Высокое качество', wowza_get_string + '4'),
+    'veltonMedium50.stream': ('Донецк. Низкое качество', wowza_get_string + '5'),
+    'veltonQuality50.stream': ('Донецк. Высокое качество', wowza_get_string + '5'),
+    'veltonMedium51.stream': ('Днепропетровск. Низкое качество', wowza_get_string + '1'),
+    'veltonQuality51.stream': ('Днепропетровск. Высокое качество', wowza_get_string + '1'),
+    'veltonMedium52.stream': ('Одесса. Низкое качество', wowza_get_string + '8'),
+    'veltonQuality52.stream': ('Одесса. Высокое качество', wowza_get_string + '8'),
+    'veltonMedium53.stream': ('Полтава. Низкое качество', wowza_get_string + '6'),
+    'veltonQuality53.stream': ('Полтава. Высокое качество', wowza_get_string + '6'),
+    'veltonMedium54.stream': ('Зеркальная струя. Низкое качество', wowza_get_string + '7'),
+    'veltonQuality54.stream': ('Зеркальная струя. Высокое качество', wowza_get_string + '7'),
+    'veltonMedium55.stream': ('Киев. Низкое качество', wowza_get_string + '1'),
+    'veltonQuality55.stream': ('Киев. Высокое качество', wowza_get_string + '1')
 }
 
 
@@ -66,6 +68,7 @@ def wowza(request, date_choice):
         return TemplateResponse(request, 'wowstat/error.html', {'err': str(e)})
 
     detail = []
+    camsgrab_list = []
     # Find streams info in returned xml.
     for child in (root.find('VHost').find('Application').
                  find('ApplicationInstance').findall('Stream')):
@@ -75,7 +78,9 @@ def wowza(request, date_choice):
 
     for i in detail:  # change stream name (name.stream) to human readable
         if i[0] in translate:
-            i[0] = translate[i[0]]
+            camsgrab_list.append(translate[i[0]][1])
+            i[0] = translate[i[0]][0]
+
 
     # Making connection to wowza server.
     ############################################################
@@ -115,7 +120,8 @@ def wowza(request, date_choice):
     cur.close()
     conn.close()
 
-    return {'summary': summary, 'detail': detail, 'current': root[0].text}
+    return {'summary': summary, 'detail': detail, 'current': root[0].text,
+            'camsgrab_list': list(set(camsgrab_list))}
 
 
 def dispatcher(request):

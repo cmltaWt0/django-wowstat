@@ -14,8 +14,15 @@
         </table>
         <input type="submit" value="View" name="submit">
     </form>
+
+    {% for i in camsgrab_list %}
+        <img src="{{ i }}" height="100" width="100">
+    {% endfor %}
 </div>
-<br><br><br><br><br>
+
+{% for i in '0123456789' %}
+    <br>
+{% endfor %}
     
     <p><b>Количество текущих одновременных просмотров: {{ current }}.</b></p>
 
