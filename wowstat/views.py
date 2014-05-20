@@ -8,6 +8,8 @@ import ConfigParser
 import xml.etree.ElementTree as etree
 from django.template.response import TemplateResponse
 
+from django.views.generic import View
+
 from datetime import date
 
 from forms import DateChoices
@@ -163,3 +165,25 @@ def dispatcher(request):
     response['date_choice'] = date_choice
 
     return TemplateResponse(request, 'wowstat/wowza.html', response)
+
+
+class Dispatcher(View):
+    def get(self, request):
+        form, date_choice = DateChoices(), date.today()
+        self.render(request, form, date_choice)
+
+    def post(self, request):
+        form = DateChoices(request.POST)
+        if form.is_valid():
+            date_choice = form.cleaned_data['date_choice']
+        else:
+            date_choice = date.today()
+        self.render(request, form, date_choice)
+
+    @staticmethod
+    def render(request, form, date_choice):
+        response = wowza(request, date_choice)
+        response['form'] = form
+        response['date_choice'] = date_choice
+
+        return TemplateResponse(request, 'wowstat/wowza.html', response)

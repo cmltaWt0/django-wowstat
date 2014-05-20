@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
+from wowstat.views import Dispatcher
 
 urlpatterns = patterns('',
-    url(r'^$', 'wowstat.views.dispatcher', name='default'),
+    url(r'^$', Dispatcher.as_view(), name='default'),
 )
 
