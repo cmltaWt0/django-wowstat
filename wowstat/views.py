@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 
 import os
-#import sqlite3
-import psycopg2
+from django.db import connection
 import httplib2
 import ConfigParser
 import xml.etree.ElementTree as etree
@@ -102,30 +101,14 @@ def wowza(request, date_choice):
             cams_dict[translate[i[0]][1]] = translate[i[0]][2]
             i[0] = translate[i[0]][0]
 
-
-    # Making connection to wowza server.
-    ############################################################
-    # Sqlite3
-    #conn = sqlite3.connect(PATH + '/wowstat.db')
-    ############################################################
-    # Postgresql
-    conn = psycopg2.connect("dbname='wowstat' user={0} password={1} host={2}"
-                            .format(postgres_user, postgres_pass, postgres_ip))
-    ############################################################
-    cur = conn.cursor()
-    ############################################################
-    # Sqlite3
-    #cur.execute('select * from summary order by -id limit 288;')
-    ############################################################
-    # Postrgesql
+    cur = connection.cursor()
 
     if date_choice == date.today():
         cur.execute('SELECT query_time::time(0), conn_counts FROM summary \
                      ORDER BY -id LIMIT 288')
     else:
         cur.execute("SELECT query_time::time(0), conn_counts FROM summary WHERE \
-                     query_time::date = '{0}' ORDER BY -id".format(date_choice))
-    ############################################################
+                     query_time::date = %s ORDER BY -id", [date_choice])
 
     summary = []
     for i in reversed(cur.fetchall()):
@@ -136,10 +119,6 @@ def wowza(request, date_choice):
     #    if len(v[0].split(':')[1]) == 1:
     #        summary[i] = [v[0].split(':')[0] + ':0' +
     #                      v[0].split(':')[1], v[1]]
-
-    conn.commit()
-    cur.close()
-    conn.close()
 
     return {'summary': summary, 'detail': detail, 'current': root[0].text,
             'cams_dict': cams_dict}
