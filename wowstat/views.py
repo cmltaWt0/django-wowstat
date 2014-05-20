@@ -147,30 +147,10 @@ def wowza(request, date_choice):
             'cams_dict': cams_dict}
 
 
-def dispatcher(request):
-    """
-    Dispatch request. Choice date for displaying.
-    """
-    if request.method == 'POST':
-        form = DateChoices(request.POST)
-        if form.is_valid():
-            date_choice = form.cleaned_data['date_choice']
-        else:
-            date_choice = date.today()
-    else:
-        form, date_choice = DateChoices(), date.today()
-
-    response = wowza(request, date_choice)
-    response['form'] = form
-    response['date_choice'] = date_choice
-
-    return TemplateResponse(request, 'wowstat/wowza.html', response)
-
-
 class Dispatcher(View):
     def get(self, request):
         form, date_choice = DateChoices(), date.today()
-        self.render(request, form, date_choice)
+        return self.render(request, form, date_choice)
 
     def post(self, request):
         form = DateChoices(request.POST)
@@ -178,7 +158,7 @@ class Dispatcher(View):
             date_choice = form.cleaned_data['date_choice']
         else:
             date_choice = date.today()
-        self.render(request, form, date_choice)
+        return self.render(request, form, date_choice)
 
     @staticmethod
     def render(request, form, date_choice):
