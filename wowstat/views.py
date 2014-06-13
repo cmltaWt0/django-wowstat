@@ -108,7 +108,7 @@ def wowza(request, date_choice):
 
     summary = []
     for i in w:
-        summary.append([i[0], i[1]])
+        summary.append([i.query_time, i.conn_counts])
 
     return {'summary': summary, 'detail': detail, 'current': root[0].text,
             'cams_dict': cams_dict}
