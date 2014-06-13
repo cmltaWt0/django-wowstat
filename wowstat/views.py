@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-#import sqlite3
-import psycopg2
 import httplib2
 import ConfigParser
 import xml.etree.ElementTree as etree
@@ -10,9 +7,10 @@ from django.template.response import TemplateResponse
 
 from django.views.generic import View
 
-from datetime import date
+from datetime import datetime, date
 
 from forms import DateChoices
+from models import WowzaConnections
 
 
 from django.conf import settings
@@ -24,9 +22,6 @@ server_ip = config.get('wowza', 'server_ip')
 server_port = config.get('wowza', 'server_port')
 login = config.get('wowza', 'login')
 password = config.get('wowza', 'password')
-postgres_ip = config.get('postgresql', 'ip')
-postgres_user = config.get('postgresql', 'user')
-postgres_pass = config.get('postgresql', 'pass')
 
 wowza_get_string = 'http://85.90.192.233:8001/cams/pathkey=cam'
 velton_video_path = 'http://velton.ua/ru/'
@@ -83,7 +78,6 @@ def wowza(request, date_choice):
     """
     h = httplib2.Http()
     h.add_credentials(login, password)
-
     try:
         root = etree.fromstring(h.request('http://' + server_ip + ':' +
                                 server_port + '/connectioncounts/')[1])
@@ -94,7 +88,7 @@ def wowza(request, date_choice):
     cams_dict = {}
     # Find streams info in returned xml.
     for child in (root.find('VHost').find('Application').
-                 find('ApplicationInstance').findall('Stream')):
+                  find('ApplicationInstance').findall('Stream')):
         # Save total session information
         detail.append([child.findall('Name')[0].text,
                        child.findall('SessionsTotal')[0].text])
@@ -104,44 +98,17 @@ def wowza(request, date_choice):
             cams_dict[translate[i[0]][1]] = translate[i[0]][2]
             i[0] = translate[i[0]][0]
 
-
-    # Making connection to wowza server.
-    ############################################################
-    # Sqlite3
-    #conn = sqlite3.connect(PATH + '/wowstat.db')
-    ############################################################
-    # Postgresql
-    conn = psycopg2.connect("dbname='wowstat' user={0} password={1} host={2}"
-                            .format(postgres_user, postgres_pass, postgres_ip))
-    ############################################################
-    cur = conn.cursor()
-    ############################################################
-    # Sqlite3
-    #cur.execute('select * from summary order by -id limit 288;')
-    ############################################################
-    # Postrgesql
-
     if date_choice == date.today():
-        cur.execute('SELECT query_time::time(0), conn_counts FROM summary \
-                     ORDER BY -id LIMIT 288')
+        w = WowzaConnections.objects.all()[:288]
     else:
-        cur.execute("SELECT query_time::time(0), conn_counts FROM summary WHERE \
-                     query_time::date = '{0}' ORDER BY -id".format(date_choice))
-    ############################################################
+        w = WowzaConnections.objects.filter(query_time=date_choice)
+        # Or use a raw query below.
+        # cur.execute("SELECT query_time::time(0), conn_counts FROM summary WHERE \
+        #              query_time::date = '{0}' ORDER BY -id".format(date_choice))
 
     summary = []
-    for i in reversed(cur.fetchall()):
+    for i in w:
         summary.append([i[0], i[1]])
-
-    # Fix 'one letter' format in minutes section - temporary for sqlite only.
-    #for i, v in enumerate(summary):
-    #    if len(v[0].split(':')[1]) == 1:
-    #        summary[i] = [v[0].split(':')[0] + ':0' +
-    #                      v[0].split(':')[1], v[1]]
-
-    conn.commit()
-    cur.close()
-    conn.close()
 
     return {'summary': summary, 'detail': detail, 'current': root[0].text,
             'cams_dict': cams_dict}
