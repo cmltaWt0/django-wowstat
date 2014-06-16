@@ -99,7 +99,7 @@ def wowza(request, date_choice):
             i[0] = translate[i[0]][0]
 
     if date_choice == date.today():
-        w = [i for i in WowzaConnections.objects.all()][:-289:-1]
+        w = list(WowzaConnections.objects.extra(order_by=['-id']).all()[:288])
         w.reverse()
     else:
         w = WowzaConnections.objects.filter(query_time=date_choice)
