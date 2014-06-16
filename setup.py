@@ -7,7 +7,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
         name='django-wowstat',
-        version='0.1.1-1test1',
+        version='0.1.2',
         packages=['wowstat'],
         include_package_data=True,
         license='The MIT License: http://www.opensource.org/licenses/mit-license.php',
