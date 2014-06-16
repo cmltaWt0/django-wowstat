@@ -99,12 +99,10 @@ def wowza(request, date_choice):
             i[0] = translate[i[0]][0]
 
     if date_choice == date.today():
-        w = WowzaConnections.objects.all()[:288]
+        w = [i for i in WowzaConnections.objects.all()][:-289:-1]
+        w.reverse()
     else:
         w = WowzaConnections.objects.filter(query_time=date_choice)
-        # Or use a raw query below.
-        # cur.execute("SELECT query_time::time(0), conn_counts FROM summary WHERE \
-        #              query_time::date = '{0}' ORDER BY -id".format(date_choice))
 
     summary = []
     for i in w:
