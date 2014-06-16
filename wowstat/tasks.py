@@ -22,7 +22,7 @@ password = config.get('wowza', 'password')
 
 from webssc import celery_app
 
-@celery_app.task
+@celery_app.task()
 def wowlog():
     """Make a connection to wowza server
        and get connections information.
@@ -38,6 +38,12 @@ def wowlog():
     value = int(root[0].text)
     WowzaConnections.objects.create(query_time=datetime.now(), conn_counts=value)
 
+    return str(value)
 
+
+@celery_app.task
+def logging(*args, **kwargs):
+    with open('log_file', 'a') as l:
+        l.write(args[0]+'\n')
 
 
