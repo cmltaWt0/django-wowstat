@@ -99,10 +99,11 @@ def wowza(request, date_choice):
             i[0] = translate[i[0]][0]
 
     if date_choice == date.today():
-        w = list(WowzaConnections.objects.filter(query_time__gt=datetime.now()-timedelta(days=1)))
-        w.reverse()
+        w = WowzaConnections.objects.filter(query_time__gt=datetime.now()-timedelta(days=1)).extra(order_by=['query_time'])
     else:
-        w = WowzaConnections.objects.filter(query_time=date_choice)
+        w = WowzaConnections.objects.filter(query_time__day=date_choice.day,
+                                            query_time__month=date_choice.month,
+                                            query_time__year=date_choice.year).extra(order_by=['query_time'])
 
     summary = []
     for i in w:
