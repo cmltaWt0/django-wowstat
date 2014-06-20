@@ -7,7 +7,7 @@ from django.template.response import TemplateResponse
 
 from django.views.generic import View
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from forms import DateChoices
 from models import WowzaConnections
@@ -99,7 +99,7 @@ def wowza(request, date_choice):
             i[0] = translate[i[0]][0]
 
     if date_choice == date.today():
-        w = list(WowzaConnections.objects.all()[:288])
+        w = list(WowzaConnections.objects.filter(query_time__gt=datetime.now()-timedelta(days=1)))
         w.reverse()
     else:
         w = WowzaConnections.objects.filter(query_time=date_choice)
