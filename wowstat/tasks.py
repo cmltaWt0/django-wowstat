@@ -22,11 +22,9 @@ password = config.get('wowza', 'password')
 
 from webssc import celery_app
 
-@celery_app.task()
+@celery_app.task(expires=60)
 def wowlog():
-    """Make a connection to wowza server
-       and get connections information.
-       Then insert this info into database.
+    """Query user connections info from Wowza streaming server and save to DB.
     """
 
     h = Http()
